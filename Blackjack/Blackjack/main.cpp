@@ -56,7 +56,7 @@ void PrintGameIntro()
 // Displays game instructions if players wants to see them
 void HandleInstructionsPrinting()
 {
-	std::cout << "Would you like to read the rules of blackjack ? ";
+	std::cout << "Would you like to read the rules of blackjack (y/n)? ";
 	std::string Input = "";
 	std::cin >> Input;
 	if (Input[0] == 'y')
@@ -77,6 +77,15 @@ void AskPlayerReady()
 // Asks the player if he wants to play again
 bool AskToPlayAgain()
 {
-	// TODO: Ask to play again
-	return true;
+	std::cout << "Would you like to play again (y/n)? ";
+	std::string Input = "";
+	std::cin >> Input;
+	if (Input[0] == 'y')
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
