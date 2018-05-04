@@ -1,6 +1,6 @@
 /*
 	AUTHOR: Thomas CIANFARANI
-	CONTEXT: Game to consolidate my new C++ skills.
+	CONTEXT: Blackjack game to consolidate my new C++ skills.
 	DESCRIPTION:
 	This is the console executable that makes use of the Blackjack class.
 	This acts as the view in a MVC pattern and is responsible for all user
@@ -10,7 +10,7 @@
 #pragma once
 #include <iostream>
 #include <string>
-#define int32 int
+using int32 = int;
 
 // Prototypes
 void IntroduceGame();
@@ -33,6 +33,7 @@ int main()
 	return 0; // exit application
 }
 
+// Introduces the game with a simple intro and instructions
 void IntroduceGame()
 {
 	PrintGameIntro();
@@ -44,13 +45,14 @@ void IntroduceGame()
 void PlayGame()
 {
 	// Loop until a player has won enough rounds
-		// Round 1, Player 0 - 0 AI (example)
 	
+		// Round 1, Player 0 - 0 AI (example)
+
 		// You draw 2 random cards:
 			// card1 (value of..)
 			// card2 (value of..)
 			// Your PLAYER VALUE is X
-	
+
 		// AI draws 2 random cards
 			// card1 (value of..)
 			// card2 (value of..)
@@ -84,6 +86,7 @@ void PlayGame()
 					// AI turn is ignored until end of round
 		// Turns loop end		
 	// Rounds loop end
+	
 	
 	// Player 3 - 2 AI (example)
 	// Congratulate the winner of the game
