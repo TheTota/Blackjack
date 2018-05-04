@@ -56,13 +56,34 @@ void PrintGameIntro()
 // Displays game instructions if players wants to see them
 void HandleInstructionsPrinting()
 {
-	std::cout << "Would you like to read the rules of blackjack (y/n)? ";
+	std::cout << "Would you like to read the rules of Blackjack (y/n)? ";
 	std::string Input = "";
 	std::cin >> Input;
 	if (Input[0] == 'y')
 	{
-		std::cout << "Some instructions..." << std::endl;
-		// TODO: Write instructions
+		std::cout << std::endl;
+		std::cout << "Blackjack is 2 players game using classic playing cards, that requires strategy and luck." << std::endl;
+		std::cout << "Here you will face an artificial intelligence." << std::endl;
+		std::cout << std::endl;
+		std::cout << "One game consists of multiple rounds." << std::endl; 
+		std::cout << "One round consists in consecutive turns taken by each player (player1, player2, player1, etc)." << std::endl;
+		std::cout << "First player to win X rounds wins the game." << std::endl; // TODO: Add amount of round to win from Blackjack class
+		std::cout << std::endl;
+		std::cout << "During a round, players will draw cards whose values will add up to make a PLAYER VALUE." << std::endl;
+		std::cout << "The goal of a player is to get his PLAYER VALUE as close as possible to the value of 21." << std::endl;
+		std::cout << "If a player has his PLAYER VALUE reach a value above 21, he will lose the round." << std::endl;
+		std::cout << "If a player reaches the exact value of 21, he will instantly win the round." << std::endl;
+		std::cout << std::endl;
+		std::cout << "Number cards have their normal value (e.g. 3 heart = 3)." << std::endl;
+		std::cout << "Special cards such as jack, queen and king have a value of 10." << std::endl;
+		std::cout << "Aces have a value of 1 or 10 which is up to the player." << std::endl;
+		std::cout << "Again, the value of each card that a player possesses will add up to make his PLAYER VALUE." << std::endl;
+		std::cout << std::endl;
+		std::cout << "At the beginning of each round, both players draw 2 random cards." << std::endl;
+		std::cout << "During his turn, a player has 2 options :" << std::endl;
+		std::cout << " - Draw a random card (which value will add up to his PLAYER VALUE)" << std::endl;
+		std::cout << " - End the round (the player will skip all his turns until the other player loses the game or ends his turn)" << std::endl;
+		std::cout << std::endl;
 	}
 }
 
