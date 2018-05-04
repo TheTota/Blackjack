@@ -10,6 +10,8 @@
 #pragma once
 #include <iostream>
 #include <string>
+#include "FBlackjackGame.h"
+#include "FPlayer.h"
 using int32 = int;
 
 // Prototypes
@@ -20,6 +22,11 @@ void PrintInstructions();
 void AskPlayerReady();
 bool AskToPlayAgain();
 void PlayGame();
+bool GameHasAWinner();
+
+FBlackjackGame BlackjackGame(3); // Game instance
+FPlayer Player;
+FPlayer AI;
 
 // Entry point of the console application
 int main()
@@ -44,8 +51,13 @@ void IntroduceGame()
 // Plays a single game to completion
 void PlayGame()
 {
+	BlackjackGame.Reset(3);
+	Player.Reset();
+	AI.Reset();
+
 	// Loop until a player has won enough rounds
-	
+	do
+	{
 		// Round 1, Player 0 - 0 AI (example)
 
 		// You draw 2 random cards:
@@ -86,8 +98,8 @@ void PlayGame()
 					// AI turn is ignored until end of round
 		// Turns loop end		
 	// Rounds loop end
-	
-	
+	} while (!GameHasAWinner());
+
 	// Player 3 - 2 AI (example)
 	// Congratulate the winner of the game
 }
@@ -160,4 +172,11 @@ bool AskToPlayAgain()
 	{
 		return false;
 	}
+}
+
+// Returns whether the game has a winner or not
+bool GameHasAWinner()
+{
+	return (Player.GetRoundsWonAmount() >= BlackjackGame.GetAmountOfRoundsToWin() ||
+		AI.GetRoundsWonAmount() >= BlackjackGame.GetAmountOfRoundsToWin());
 }

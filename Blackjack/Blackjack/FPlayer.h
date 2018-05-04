@@ -14,16 +14,20 @@ class FPlayer
 public:
 	FPlayer();
 	
+	// Getters
 	int32 GetRoundsWonAmount();
 	int32 GetPlayerValue();
-	bool PlayerHasEndedTurn();
-
+	bool PlayerHasEndedRound();
+	// Setters
+	void WinRound();
+	// Workers
 	void EndTurn();
 	void DrawCard(); // TODO: Richer return value
+	void Reset();
 
 private:
 	int32 RoundsWonAmount;
 	int32 PlayerValue;
-	bool HasEndedTurn;
+	bool HasEndedRound;
 };
 

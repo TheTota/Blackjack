@@ -9,30 +9,26 @@
 #include "FPlayer.h"
 
 // Constructor
-FPlayer::FPlayer()
-{
-	
-}
+FPlayer::FPlayer() { Reset(); }
 
-int32 FPlayer::GetRoundsWonAmount()
-{
-	return int32();
-}
+// Getters
+int32 FPlayer::GetRoundsWonAmount() { return RoundsWonAmount; }
+int32 FPlayer::GetPlayerValue() { return PlayerValue; }
+bool FPlayer::PlayerHasEndedRound() { return HasEndedRound; }
 
-int32 FPlayer::GetPlayerValue()
-{
-	return int32();
-}
+// Setters
+void FPlayer::WinRound() { RoundsWonAmount++; }
+void FPlayer::EndTurn() { HasEndedRound = true; }
 
-bool FPlayer::PlayerHasEndedTurn()
+// Workers
+void FPlayer::Reset()
 {
-	return false;
-}
-
-void FPlayer::EndTurn()
-{
+	RoundsWonAmount = 0;
+	PlayerValue = 0;
+	HasEndedRound = false;
 }
 
 void FPlayer::DrawCard()
 {
+	// TODO: Code method DrawCard()
 }

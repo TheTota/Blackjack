@@ -19,6 +19,8 @@ public:
 	int32 GetAmountOfRoundsToWin();
 	// Setters
 	void NextRound();
+	// Workers
+	void Reset(int32);
 
 private:
 	int32 CurrentRound;
