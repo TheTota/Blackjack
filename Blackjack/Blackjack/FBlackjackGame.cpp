@@ -13,8 +13,8 @@
 FBlackjackGame::FBlackjackGame(int32 AmountOfRounds) { Reset(AmountOfRounds); }
 
 // Getters
-int32 FBlackjackGame::GetCurrentRound() { return CurrentRound; }
-int32 FBlackjackGame::GetAmountOfRoundsToWin() { return AmountOfRoundsToWin; }
+int32 FBlackjackGame::GetCurrentRound() const { return CurrentRound; }
+int32 FBlackjackGame::GetAmountOfRoundsToWin() const { return AmountOfRoundsToWin; }
 
 // Setters
 void FBlackjackGame::NextRound() { CurrentRound++; }

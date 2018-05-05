@@ -17,8 +17,8 @@ public:
 	FBlackjackGame(int32);
 	
 	// Getters
-	int32 GetCurrentRound();
-	int32 GetAmountOfRoundsToWin();
+	int32 GetCurrentRound() const;
+	int32 GetAmountOfRoundsToWin() const ;
 	// Setters
 	void NextRound();
 	// Workers

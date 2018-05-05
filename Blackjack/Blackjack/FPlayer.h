@@ -17,10 +17,10 @@ public:
 	FPlayer(std::string);
 	
 	// Getters
-	int32 GetRoundsWonAmount();
-	int32 GetPlayerValue();
-	bool PlayerHasEndedRound();
-	std::string GetPlayerName();
+	int32 GetRoundsWonAmount() const;
+	int32 GetPlayerValue() const;
+	bool PlayerHasEndedRound() const;
+	std::string GetPlayerName() const;
 	// Setters
 	void WinRound();
 	void AddCard(std::pair<std::string, int32>);
@@ -35,4 +35,3 @@ private:
 	int32 PlayerValue;
 	bool HasEndedRound;
 };
-

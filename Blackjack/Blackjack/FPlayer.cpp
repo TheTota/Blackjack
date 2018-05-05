@@ -12,10 +12,10 @@
 FPlayer::FPlayer(std::string Name) { Reset(Name); }
 
 // Getters
-int32 FPlayer::GetRoundsWonAmount() { return RoundsWonAmount; }
-int32 FPlayer::GetPlayerValue() { return PlayerValue; }
-bool FPlayer::PlayerHasEndedRound() { return HasEndedRound; }
-std::string FPlayer::GetPlayerName() { return Name; }
+int32 FPlayer::GetRoundsWonAmount() const { return RoundsWonAmount; }
+int32 FPlayer::GetPlayerValue() const { return PlayerValue; }
+bool FPlayer::PlayerHasEndedRound() const { return HasEndedRound; }
+std::string FPlayer::GetPlayerName() const { return Name; }
 
 // Setters
 void FPlayer::WinRound() { RoundsWonAmount++; }
