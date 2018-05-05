@@ -28,8 +28,8 @@ void FBlackjackGame::Reset(int32 AmountOfRounds)
 	// Init cards
 	int32 CardIndex = 0;
 	AvailableCards = {
-		// TODO: Add Aces
 		// HEARTS
+		{CardIndex++, { "Ace of Hearts", 111 }},
 		{CardIndex++, { "2 of Hearts", 2 }},
 		{CardIndex++, { "3 of Hearts", 3 }},
 		{CardIndex++, { "4 of Hearts", 4 }},
@@ -43,6 +43,7 @@ void FBlackjackGame::Reset(int32 AmountOfRounds)
 		{CardIndex++, { "Queen of Hearts", 10 }},
 		{CardIndex++, { "King of Hearts", 10 }},
 		// DIAMONDS
+		{CardIndex++, { "Ace of Diamonds", 111 }},
 		{CardIndex++, { "2 of Diamonds", 2 }},
 		{CardIndex++, { "3 of Diamonds", 3 }},
 		{CardIndex++, { "4 of Diamonds", 4 }},
@@ -56,6 +57,7 @@ void FBlackjackGame::Reset(int32 AmountOfRounds)
 		{CardIndex++, { "Queen of Diamonds", 10 }},
 		{CardIndex++, { "King of Diamonds", 10 }},
 		// CLUBS
+		{CardIndex++, { "Ace of Clubs", 111 }},
 		{CardIndex++, { "2 of Clubs", 2 }},
 		{CardIndex++, { "3 of Clubs", 3 }},
 		{CardIndex++, { "4 of Clubs", 4 }},
@@ -69,6 +71,7 @@ void FBlackjackGame::Reset(int32 AmountOfRounds)
 		{CardIndex++, { "Queen of Clubs", 10 }},
 		{CardIndex++, { "King of Clubs", 10 }},
 		// SPADES
+		{CardIndex++, { "Ace of Spades", 111 }},
 		{CardIndex++, { "2 of Spades", 2 }},
 		{CardIndex++, { "3 of Spades", 3 }},
 		{CardIndex++, { "4 of Spades", 4 }},

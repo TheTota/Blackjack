@@ -28,8 +28,8 @@ void AssignNewCard(FPlayer *ConcernedPlayer);
 void PrintPlayerValue(FPlayer);
 
 FBlackjackGame BlackjackGame(3); // Game instance
-FPlayer Player("Player");
-FPlayer AI("AI");
+FPlayer Player("Player", PlayerType::Human);
+FPlayer AI("AI", PlayerType::AI);
 
 // Entry point of the console application
 int main()
@@ -55,17 +55,17 @@ void IntroduceGame()
 void PlayGame()
 {
 	BlackjackGame.Reset(3);
-	Player.Reset("Player");
-	AI.Reset("AI");
+	Player.Reset("Player", PlayerType::Human);
+	AI.Reset("AI", PlayerType::AI);
 
 	// Loop until a player has won enough rounds
+	// TODO: Add step by step progress ?
 	do
 	{
-		// Round 1, Player 0 - 0 AI (example)
 		PrintRoundIntro();
 
 		// Player draws 2 random cards:
-		std::cout << Player.GetPlayerName() << " INITIAL TURN" << std::endl;	
+		std::cout << Player.GetPlayerName() << " INITIAL TURN" << std::endl;
 		std::cout << "-------------------" << std::endl;
 		AssignNewCard(&Player); // card1 		
 		AssignNewCard(&Player); // card2 
@@ -149,7 +149,7 @@ void PrintInstructions()
 	std::cout << std::endl;
 	std::cout << "Number cards have their normal value (e.g. 3 heart = 3).\n";
 	std::cout << "Special cards such as jack, queen and king have a value of 10.\n";
-	std::cout << "Aces have a value of 1 or 10 which is up to the player.\n";
+	std::cout << "Aces have a value of 1 or 11 which is up to the player.\n";
 	std::cout << "Again, the value of each card that a player possesses will add up to make his PLAYER VALUE.\n";
 	std::cout << std::endl;
 	std::cout << "At the beginning of each round, both players draw 2 random cards.\n";
@@ -204,12 +204,38 @@ void PrintRoundIntro()
 void AssignNewCard(FPlayer *ConcernedPlayer)
 {
 	std::pair<std::string, int32> DrawnCard = BlackjackGame.DrawCard(); // Draw and store new card
-	ConcernedPlayer->AddCard(DrawnCard); // Add card to player's cards
-
-	// Give user info about drawn card and new player value
-	std::cout << ConcernedPlayer->GetPlayerName() << " draws a " << DrawnCard.first;
-	std::cout << " which has a value of " << DrawnCard.second;
-	std::cout << std::endl;
+	if (DrawnCard.second != 111) // card is NOT an Ace
+	{
+		ConcernedPlayer->AddCard(DrawnCard); // Add card to player's cards
+		std::cout << ConcernedPlayer->GetPlayerName() << " draws a " << DrawnCard.first;
+		std::cout << " which has a value of " << DrawnCard.second << std::endl;
+	}
+	else // card is an Ace
+	{
+		if (ConcernedPlayer->GetPlayerType() == PlayerType::Human) // if player draws an Ace
+		{
+			std::cout << ConcernedPlayer->GetPlayerName() << " draws an " << DrawnCard.first << std::endl;
+			int32 AceValue;
+			do
+			{
+				std::cout << "What value do you want it to take (1 or 11)? ";				
+				std::cin >> AceValue;
+				if (AceValue == 11 || AceValue == 1)
+				{
+					DrawnCard.second = AceValue;
+				}
+			} while (AceValue != 11 && AceValue != 1);
+			ConcernedPlayer->AddCard(DrawnCard);// Add card to player's cards
+		}
+		else if (ConcernedPlayer->GetPlayerType() == PlayerType::AI) // if AI draws and Ace
+		{
+			// TODO: AI decision making when drawing and ACE
+			std::cout << ConcernedPlayer->GetPlayerName() << " draws an " << DrawnCard.first << std::endl;
+			std::cout << ConcernedPlayer->GetPlayerName() << " decides to give it a value of 11." << std::endl;
+			DrawnCard.second = 11;
+			ConcernedPlayer->AddCard(DrawnCard);
+		}
+	}	
 }
 
 // Prints a given player's player value
