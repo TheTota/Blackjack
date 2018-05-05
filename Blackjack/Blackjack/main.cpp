@@ -23,6 +23,7 @@ void AskPlayerReady();
 bool AskToPlayAgain();
 void PlayGame();
 bool GameHasAWinner();
+void PrintRoundIntro();
 
 FBlackjackGame BlackjackGame(3); // Game instance
 FPlayer Player;
@@ -59,6 +60,7 @@ void PlayGame()
 	do
 	{
 		// Round 1, Player 0 - 0 AI (example)
+		PrintRoundIntro();
 
 		// You draw 2 random cards:
 			// card1 (value of..)
@@ -131,7 +133,7 @@ void PrintInstructions()
 	std::cout << std::endl;
 	std::cout << "One game consists of multiple rounds." << std::endl;
 	std::cout << "One round consists in consecutive turns taken by each player (player1, player2, player1, etc)." << std::endl;
-	std::cout << "First player to win X rounds wins the game." << std::endl; // TODO: Add amount of round to win from Blackjack class
+	std::cout << "First player to win " << BlackjackGame.GetAmountOfRoundsToWin() << " rounds wins the game." << std::endl;
 	std::cout << std::endl;
 	std::cout << "During a round, players will draw cards whose values will add up to make a PLAYER VALUE." << std::endl;
 	std::cout << "The goal of a player is to get his PLAYER VALUE as close as possible to the value of 21." << std::endl;
@@ -179,4 +181,11 @@ bool GameHasAWinner()
 {
 	return (Player.GetRoundsWonAmount() >= BlackjackGame.GetAmountOfRoundsToWin() ||
 		AI.GetRoundsWonAmount() >= BlackjackGame.GetAmountOfRoundsToWin());
+}
+
+// Prints the current round and the scores
+void PrintRoundIntro()
+{
+	std::cout << "Round " << BlackjackGame.GetCurrentRound() << ", ";
+	std::cout << "Player " << Player.GetRoundsWonAmount() << " - " << AI.GetRoundsWonAmount() << " AI\n";
 }
