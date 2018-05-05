@@ -7,7 +7,7 @@
 
 #pragma once
 #include "FBlackjackGame.h"
-#include <iterator>
+#include <ctime>
 
 // Constructor
 FBlackjackGame::FBlackjackGame(int32 AmountOfRounds) { Reset(AmountOfRounds); }
@@ -90,6 +90,7 @@ void FBlackjackGame::Reset(int32 AmountOfRounds)
 // Draws a random card from the available cards and returns
 std::pair<std::string, int32> FBlackjackGame::DrawCard()
 {
+	srand(std::time(NULL)); // To get more random results
 	int32 Random = rand() % AvailableCards.size();
 	return AvailableCards[Random];
 }

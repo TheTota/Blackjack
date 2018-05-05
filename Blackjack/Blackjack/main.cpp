@@ -26,6 +26,8 @@ bool GameHasAWinner();
 void PrintRoundIntro();
 void AssignNewCard(FPlayer *ConcernedPlayer);
 void PrintPlayerValue(FPlayer);
+void DrawInitialCard(FPlayer *ConcernedPlayer, int32 Turn);
+void DrawInitialCards();
 
 FBlackjackGame BlackjackGame(3); // Game instance
 FPlayer Player("Player", PlayerType::Human);
@@ -62,22 +64,8 @@ void PlayGame()
 	// TODO: Add step by step progress ?
 	do
 	{
-		PrintRoundIntro();
-
-		// Player draws 2 random cards:
-		std::cout << Player.GetPlayerName() << " INITIAL TURN" << std::endl;
-		std::cout << "-------------------" << std::endl;
-		AssignNewCard(&Player); // card1 		
-		AssignNewCard(&Player); // card2 
-		PrintPlayerValue(Player);
-		std::cout << std::endl;
-
-		// AI draws 2 random cards
-		std::cout << AI.GetPlayerName() << " INITIAL TURN" << std::endl;
-		std::cout << "---------------" << std::endl;
-		AssignNewCard(&AI); // card1 
-		AssignNewCard(&AI); // card2
-		PrintPlayerValue(AI);
+		PrintRoundIntro();		
+		DrawInitialCards();
 
 		// Loop until there's a winner (turns)
 			// If Player didn't end his round, Player turn (PLAYER VALUE = X) 
@@ -241,5 +229,24 @@ void AssignNewCard(FPlayer *ConcernedPlayer)
 // Prints a given player's player value
 void PrintPlayerValue(FPlayer ConcernedPlayer)
 {
-	std::cout << ConcernedPlayer.GetPlayerName() << "'s player value = " << ConcernedPlayer.GetPlayerValue() << std::endl;
+	std::cout << ConcernedPlayer.GetPlayerName() << "'s PLAYER VALUE = " << ConcernedPlayer.GetPlayerValue() << std::endl;
+}
+
+// Draws an initial card
+void DrawInitialCard(FPlayer *ConcernedPlayer, int32 Turn)
+{
+	std::cout << ConcernedPlayer->GetPlayerName() << " INITIAL TURN (" << Turn << "/2)" << std::endl;
+	std::cout << "-------------------------" << std::endl;
+	AssignNewCard(ConcernedPlayer);
+	PrintPlayerValue(*ConcernedPlayer);
+	std::cout << std::endl;
+}
+
+// Draws 2 cards for each player at the beginning of a round
+void DrawInitialCards()
+{
+	DrawInitialCard(&Player, 1); // Player draws 1rst random card		
+	DrawInitialCard(&AI, 1); // AI draws 1rst random card
+	DrawInitialCard(&Player, 2); // Player draws 2nd random card		
+	DrawInitialCard(&AI, 2); // Player draws 2nd random card
 }
