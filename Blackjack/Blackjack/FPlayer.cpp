@@ -18,6 +18,7 @@ bool FPlayer::PlayerHasEndedRound() { return HasEndedRound; }
 
 // Setters
 void FPlayer::WinRound() { RoundsWonAmount++; }
+void FPlayer::AddCard(std::pair<std::string, int> Card) { Cards.insert(Card); }
 void FPlayer::EndTurn() { HasEndedRound = true; }
 
 // Workers
@@ -26,9 +27,5 @@ void FPlayer::Reset()
 	RoundsWonAmount = 0;
 	PlayerValue = 0;
 	HasEndedRound = false;
-}
-
-void FPlayer::DrawCard()
-{
-	// TODO: Code method DrawCard()
+	Cards.clear();
 }

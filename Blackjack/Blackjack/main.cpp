@@ -63,14 +63,16 @@ void PlayGame()
 		PrintRoundIntro();
 
 		// You draw 2 random cards:
-			// card1 (value of..)
-			// card2 (value of..)
-			// Your PLAYER VALUE is X
+		std::cout << "Player draw 2 random cards : " << std::endl;
+		// card1 (value of..)
+		BlackjackGame.DrawCard();
+		// card2 (value of..)
+		// Your PLAYER VALUE is X
 
 		// AI draws 2 random cards
-			// card1 (value of..)
-			// card2 (value of..)
-			// AI PLAYER VALUE is Y
+		// card1 (value of..)
+		// card2 (value of..)
+		// AI PLAYER VALUE is Y
 
 		// Loop until there's a winner (turns)
 			// If Player didn't end his round, Player turn (PLAYER VALUE = X) 

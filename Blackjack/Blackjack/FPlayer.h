@@ -7,6 +7,8 @@
 
 #pragma once
 #include <string>
+#include <map>
+#define TMap std::map
 using int32 = int;
 
 class FPlayer
@@ -20,12 +22,13 @@ public:
 	bool PlayerHasEndedRound();
 	// Setters
 	void WinRound();
-	// Workers
+	void AddCard(std::pair<std::string, int>);
 	void EndTurn();
-	void DrawCard(); // TODO: Richer return value
+	// Workers
 	void Reset();
 
 private:
+	TMap<std::string, int> Cards;
 	int32 RoundsWonAmount;
 	int32 PlayerValue;
 	bool HasEndedRound;

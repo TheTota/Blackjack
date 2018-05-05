@@ -16,14 +16,16 @@ int32 FBlackjackGame::GetCurrentRound() { return CurrentRound; }
 int32 FBlackjackGame::GetAmountOfRoundsToWin() { return AmountOfRoundsToWin; }
 
 // Setters
-void FBlackjackGame::NextRound()
-{
-	CurrentRound++;
-}
+void FBlackjackGame::NextRound() { CurrentRound++; }
 
 // Workers 
 void FBlackjackGame::Reset(int32 AmountOfRounds)
 {
 	CurrentRound = 1;
 	AmountOfRoundsToWin = AmountOfRounds;
+}
+
+void FBlackjackGame::DrawCard()
+{
+	// TODO: Code method DrawCard()
 }

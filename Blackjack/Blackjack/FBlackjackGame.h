@@ -21,6 +21,7 @@ public:
 	void NextRound();
 	// Workers
 	void Reset(int32);
+	void DrawCard(); // TODO: Richer return value
 
 private:
 	int32 CurrentRound;
