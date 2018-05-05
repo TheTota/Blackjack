@@ -9,21 +9,27 @@
 #include "FPlayer.h"
 
 // Constructor
-FPlayer::FPlayer() { Reset(); }
+FPlayer::FPlayer(std::string Name) { Reset(Name); }
 
 // Getters
 int32 FPlayer::GetRoundsWonAmount() { return RoundsWonAmount; }
 int32 FPlayer::GetPlayerValue() { return PlayerValue; }
 bool FPlayer::PlayerHasEndedRound() { return HasEndedRound; }
+std::string FPlayer::GetPlayerName() { return Name; }
 
 // Setters
 void FPlayer::WinRound() { RoundsWonAmount++; }
-void FPlayer::AddCard(std::pair<std::string, int> Card) { Cards.insert(Card); }
+void FPlayer::AddCard(std::pair<std::string, int32> Card)
+{
+	PlayerValue += Card.second;
+	Cards.insert(Card);
+}
 void FPlayer::EndTurn() { HasEndedRound = true; }
 
 // Workers
-void FPlayer::Reset()
+void FPlayer::Reset(std::string Name)
 {
+	this->Name = Name;
 	RoundsWonAmount = 0;
 	PlayerValue = 0;
 	HasEndedRound = false;

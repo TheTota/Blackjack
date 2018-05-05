@@ -24,10 +24,12 @@ bool AskToPlayAgain();
 void PlayGame();
 bool GameHasAWinner();
 void PrintRoundIntro();
+void AssignNewCard(FPlayer);
+void PrintPlayerValue(FPlayer);
 
 FBlackjackGame BlackjackGame(3); // Game instance
-FPlayer Player;
-FPlayer AI;
+FPlayer Player("Player");
+FPlayer AI("AI");
 
 // Entry point of the console application
 int main()
@@ -53,8 +55,8 @@ void IntroduceGame()
 void PlayGame()
 {
 	BlackjackGame.Reset(3);
-	Player.Reset();
-	AI.Reset();
+	Player.Reset("Player");
+	AI.Reset("AI");
 
 	// Loop until a player has won enough rounds
 	do
@@ -62,17 +64,20 @@ void PlayGame()
 		// Round 1, Player 0 - 0 AI (example)
 		PrintRoundIntro();
 
-		// You draw 2 random cards:
-		std::cout << "Player draw 2 random cards : " << std::endl;
-		// card1 (value of..)
-		BlackjackGame.DrawCard();
-		// card2 (value of..)
-		// Your PLAYER VALUE is X
+		// Player draws 2 random cards:
+		std::cout << Player.GetPlayerName() << " INITIAL TURN" << std::endl;	
+		std::cout << "-------------------" << std::endl;
+		AssignNewCard(Player); // card1 		
+		AssignNewCard(Player); // card2 
+		PrintPlayerValue(Player);
+		std::cout << std::endl;
 
 		// AI draws 2 random cards
-		// card1 (value of..)
-		// card2 (value of..)
-		// AI PLAYER VALUE is Y
+		std::cout << AI.GetPlayerName() << " INITIAL TURN" << std::endl;
+		std::cout << "---------------" << std::endl;
+		AssignNewCard(AI); // card1 
+		AssignNewCard(AI); // card2
+		PrintPlayerValue(AI);
 
 		// Loop until there's a winner (turns)
 			// If Player didn't end his round, Player turn (PLAYER VALUE = X) 
@@ -181,13 +186,34 @@ bool AskToPlayAgain()
 // Returns whether the game has a winner or not
 bool GameHasAWinner()
 {
-	return (Player.GetRoundsWonAmount() >= BlackjackGame.GetAmountOfRoundsToWin() ||
-		AI.GetRoundsWonAmount() >= BlackjackGame.GetAmountOfRoundsToWin());
+	return true;
+	//return (Player.GetRoundsWonAmount() >= BlackjackGame.GetAmountOfRoundsToWin() ||
+	//	AI.GetRoundsWonAmount() >= BlackjackGame.GetAmountOfRoundsToWin());
 }
 
 // Prints the current round and the scores
 void PrintRoundIntro()
 {
-	std::cout << "Round " << BlackjackGame.GetCurrentRound() << ", ";
-	std::cout << "Player " << Player.GetRoundsWonAmount() << " - " << AI.GetRoundsWonAmount() << " AI\n";
+	std::cout << "----------------------------" << std::endl;
+	std::cout << "- Round " << BlackjackGame.GetCurrentRound() << ", ";
+	std::cout << "Player " << Player.GetRoundsWonAmount() << " - " << AI.GetRoundsWonAmount() << " AI -\n";
+	std::cout << "----------------------------" << std::endl;
+}
+
+// Draws a new card to a given Player, and display informations about it
+void AssignNewCard(FPlayer ConcernedPlayer)
+{
+	std::pair<std::string, int32> DrawnCard = BlackjackGame.DrawCard(); // Draw and store new card
+	ConcernedPlayer.AddCard(DrawnCard); // Add card to player's cards
+
+	// Give user info about drawn card and new player value
+	std::cout << ConcernedPlayer.GetPlayerName() << " draws a " << DrawnCard.first;
+	std::cout << " which has a value of " << DrawnCard.second;
+	std::cout << std::endl;
+}
+
+// Prints a given player's player value
+void PrintPlayerValue(FPlayer ConcernedPlayer)
+{
+	std::cout << ConcernedPlayer.GetPlayerName() << "'s player value = " << ConcernedPlayer.GetPlayerValue() << std::endl;
 }

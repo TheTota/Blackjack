@@ -14,21 +14,23 @@ using int32 = int;
 class FPlayer
 {
 public:
-	FPlayer();
+	FPlayer(std::string);
 	
 	// Getters
 	int32 GetRoundsWonAmount();
 	int32 GetPlayerValue();
 	bool PlayerHasEndedRound();
+	std::string GetPlayerName();
 	// Setters
 	void WinRound();
-	void AddCard(std::pair<std::string, int>);
+	void AddCard(std::pair<std::string, int32>);
 	void EndTurn();
 	// Workers
-	void Reset();
+	void Reset(std::string);
 
 private:
-	TMap<std::string, int> Cards;
+	std::string Name;
+	TMap<std::string, int32> Cards;
 	int32 RoundsWonAmount;
 	int32 PlayerValue;
 	bool HasEndedRound;

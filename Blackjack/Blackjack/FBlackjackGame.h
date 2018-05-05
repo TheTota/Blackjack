@@ -7,6 +7,8 @@
 
 #pragma once
 #include <string>
+#include <map>
+#define TMap std::map
 using int32 = int;
 
 class FBlackjackGame
@@ -21,11 +23,11 @@ public:
 	void NextRound();
 	// Workers
 	void Reset(int32);
-	void DrawCard(); // TODO: Richer return value
+	std::pair<std::string, int32> DrawCard();
 
 private:
+	TMap<int32, std::pair<std::string, int32>> AvailableCards;
 	int32 CurrentRound;
 	int32 AmountOfRoundsToWin;
-
 };
 
