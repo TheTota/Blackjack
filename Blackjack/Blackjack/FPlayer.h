@@ -17,6 +17,12 @@ enum class PlayerType
 	AI
 };
 
+enum class PlayerAction
+{
+	Hit,
+	Stand
+};
+
 class FPlayer
 {
 public:
@@ -25,15 +31,16 @@ public:
 	// Getters
 	int32 GetRoundsWonAmount() const;
 	int32 GetPlayerValue() const;
-	bool PlayerHasEndedRound() const;
+	bool HasEndedRound() const;
 	std::string GetPlayerName() const;
 	PlayerType GetPlayerType() const;
 	// Setters
 	void WinRound();
 	void AddCard(std::pair<std::string, int32>);
-	void EndTurn();
+	void EndRound();
 	// Workers
-	void Reset(std::string, PlayerType);
+	void CompleteReset(std::string, PlayerType);
+	void RoundReset();
 
 private:
 	std::string Name;
@@ -41,5 +48,5 @@ private:
 	TMap<std::string, int32> Cards;
 	int32 RoundsWonAmount;
 	int32 PlayerValue;
-	bool HasEndedRound;
+	bool RoundEnded;
 };

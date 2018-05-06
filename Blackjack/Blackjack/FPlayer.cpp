@@ -9,14 +9,13 @@
 #include "FPlayer.h"
 
 // Constructor
-FPlayer::FPlayer(std::string Name, PlayerType Type) { Reset(Name, Type); }
+FPlayer::FPlayer(std::string Name, PlayerType Type) { CompleteReset(Name, Type); }
 
 // Getters
 int32 FPlayer::GetRoundsWonAmount() const { return RoundsWonAmount; }
 int32 FPlayer::GetPlayerValue() const { return PlayerValue; }
-bool FPlayer::PlayerHasEndedRound() const { return HasEndedRound; }
+bool FPlayer::HasEndedRound() const { return RoundEnded; }
 std::string FPlayer::GetPlayerName() const { return Name; }
-
 PlayerType FPlayer::GetPlayerType() const { return Type; }
 
 // Setters
@@ -26,15 +25,22 @@ void FPlayer::AddCard(std::pair<std::string, int32> Card)
 	PlayerValue += Card.second;
 	Cards.insert(Card);
 }
-void FPlayer::EndTurn() { HasEndedRound = true; }
+void FPlayer::EndRound() { RoundEnded = true; }
 
 // Workers
-void FPlayer::Reset(std::string Name, PlayerType Type)
+void FPlayer::CompleteReset(std::string Name, PlayerType Type) // Resets player completly
 {
 	this->Name = Name;
 	this->Type = Type;
 	RoundsWonAmount = 0;
 	PlayerValue = 0;
-	HasEndedRound = false;
+	RoundEnded = false;
+	Cards.clear();
+}
+
+void FPlayer::RoundReset() // Resets player's round values
+{
+	PlayerValue = 0;
+	RoundEnded = false;
 	Cards.clear();
 }
