@@ -8,7 +8,8 @@
 #pragma once
 #include "FPlayer.h"
 
-// Constructor
+// Constructors
+FPlayer::FPlayer() {}
 FPlayer::FPlayer(std::string Name, PlayerType Type) { CompleteReset(Name, Type); }
 
 // Getters

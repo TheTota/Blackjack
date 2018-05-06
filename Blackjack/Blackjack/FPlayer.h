@@ -26,6 +26,7 @@ enum class PlayerAction
 class FPlayer
 {
 public:
+	FPlayer();
 	FPlayer(std::string, PlayerType);
 	
 	// Getters

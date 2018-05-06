@@ -25,6 +25,7 @@ bool AskToPlayAgain();
 void PlayGame();
 bool GameHasAWinner();
 bool RoundHasAWinner();
+FPlayer GetRoundWinner();
 void PrintRoundIntro();
 void AssignNewCard(FPlayer *ConcernedPlayer);
 void PrintPlayerValue(FPlayer);
@@ -38,6 +39,8 @@ void AddStep();
 FBlackjackGame BlackjackGame(3); // Game instance
 FPlayer Player("Player", PlayerType::Human);
 FPlayer AI("AI", PlayerType::AI);
+
+FPlayer FirstPlayerToEndRound;
 
 // Entry point of the console application
 int main()
@@ -69,7 +72,6 @@ void PlayGame()
 	PrintRoundIntro();
 
 	// Loop until a player has won enough rounds
-	// TODO: Add step by step progress
 	do
 	{
 		DrawInitialCards();
@@ -77,7 +79,7 @@ void PlayGame()
 		// Loop until there's a round winner (turns)
 		while (!RoundHasAWinner())
 		{
-			if (BlackjackGame.GetCurrentTurn() == Turn::PlayerTurn)
+			if (BlackjackGame.GetCurrentTurn() == Turn::PlayerTurn) // Player's turn
 			{
 				PrintTurnIntro(Player);
 				AddStep();
@@ -96,6 +98,7 @@ void PlayGame()
 					else // if Player decides to Stand
 					{
 						Player.EndRound();
+						FirstPlayerToEndRound = Player;
 						std::cout << Player.GetPlayerName() << " decides to end his round.\n";
 						AddStep();
 					}
@@ -105,7 +108,7 @@ void PlayGame()
 				BlackjackGame.NextTurn();
 				AddStep();
 			}
-			else if (BlackjackGame.GetCurrentTurn() == Turn::AITurn)
+			else if (BlackjackGame.GetCurrentTurn() == Turn::AITurn) // AI's turn
 			{
 				// AI Turn
 				PrintTurnIntro(AI);
@@ -125,6 +128,7 @@ void PlayGame()
 					else // if AI decides to Stand
 					{
 						AI.EndRound();
+						FirstPlayerToEndRound = AI;
 						std::cout << AI.GetPlayerName() << " decides to end his round.\n";
 					}
 				}
@@ -135,6 +139,11 @@ void PlayGame()
 			}
 		} // Turns loop end	
 
+		// Print round winner
+		FPlayer RoundWinner = GetRoundWinner();
+		std::cout << RoundWinner.GetPlayerName() << " wins the round!\n";
+
+		// Round end actions
 		BlackjackGame.NextRound();
 		RoundResetPlayers();
 	} while (!GameHasAWinner()); // Rounds loop end
@@ -230,6 +239,50 @@ bool RoundHasAWinner()
 	bool StandCase = (Player.HasEndedRound() && AI.HasEndedRound());
 
 	return (ValueCase || StandCase);
+}
+
+// Returns the round winner if there is any
+FPlayer GetRoundWinner()
+{
+	// Check if a player has reached the value of 21 
+	if (Player.GetPlayerValue() == 21)
+	{
+		return Player;
+	}
+	else if (AI.GetPlayerValue() == 21)
+	{
+		return AI;
+	}
+
+	// Check if a player has reached a value above 21
+	if (Player.GetPlayerValue() > 21)
+	{
+		return AI;
+	}
+	else if (AI.GetPlayerValue() > 21)
+	{
+		return Player;
+	}
+
+	// Check if both player stand
+	if (Player.HasEndedRound() && AI.HasEndedRound())
+	{
+		if (Player.GetPlayerValue() > AI.GetPlayerValue())
+		{
+			return Player;
+		}
+		else if (Player.GetPlayerValue() < AI.GetPlayerValue())
+		{
+			return AI;
+		}
+		else if (Player.GetPlayerValue() == AI.GetPlayerValue())
+		{
+			return FirstPlayerToEndRound;
+		}
+	}	
+
+	// In case..
+	return Player;
 }
 
 // Prints the current round and the scores
