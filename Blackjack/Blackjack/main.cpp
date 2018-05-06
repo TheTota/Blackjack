@@ -24,6 +24,7 @@ void AskPlayerReady();
 bool AskToPlayAgain();
 void PlayGame();
 bool GameHasAWinner();
+FPlayer GetGameWinner();
 bool RoundHasAWinner();
 FPlayer* GetRoundWinner();
 void PrintRoundIntro();
@@ -73,6 +74,8 @@ void PlayGame()
 	do
 	{
 		// TODO: Eventually clear console at the beginning of a round
+		// TODO: Fix spacing bug after being asked something (ace, action..) and pressing enter with empty input
+		// TODO: Fix AI having the first turn after initial turns (happened round 3,4)
 		PrintRoundIntro();
 		DrawInitialCards();
 
@@ -151,13 +154,14 @@ void PlayGame()
 		AddStep();
 	} while (!GameHasAWinner()); // Rounds loop end
 
-	// Print score : Player 3 - 2 AI (example)
+	// Print score
 	std::cout << "Score of the game : " << Player.GetName() << " " << Player.GetRoundsWonAmount();
 	std::cout << " - " << AI.GetRoundsWonAmount() << " " << AI.GetName();
 	std::cout << std::endl;
 
 	// Congratulate the winner of the game
-	std::cout << "Game has ended!\n";
+	std::cout << "Congratulations to the winner, " << GetGameWinner().GetName() << "!\n";
+	AddStep();
 }
 
 // Prints the simple introduction to the game
@@ -237,6 +241,22 @@ bool GameHasAWinner()
 		AI.GetRoundsWonAmount() >= BlackjackGame.GetAmountOfRoundsToWin());
 }
 
+// Returns the winner of the game
+FPlayer GetGameWinner()
+{
+	if (Player.GetRoundsWonAmount() >= BlackjackGame.GetAmountOfRoundsToWin())
+	{
+		return Player;
+	}
+	else if (AI.GetRoundsWonAmount() >= BlackjackGame.GetAmountOfRoundsToWin())
+	{
+		return AI;
+	}
+
+	// in case
+	return Player;
+}
+
 // Returns whether the round has a winner or not
 bool RoundHasAWinner()
 {
@@ -284,7 +304,7 @@ FPlayer* GetRoundWinner()
 		{
 			return &FirstPlayerToEndRound;
 		}
-	}	
+	}
 
 	// In case..
 	return &Player;
