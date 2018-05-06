@@ -23,11 +23,13 @@ void AskPlayerReady();
 bool AskToPlayAgain();
 void PlayGame();
 bool GameHasAWinner();
+bool RoundHasAWinner();
 void PrintRoundIntro();
 void AssignNewCard(FPlayer *ConcernedPlayer);
 void PrintPlayerValue(FPlayer);
 void DrawInitialCard(FPlayer *ConcernedPlayer, int32 Turn);
 void DrawInitialCards();
+void PrintTurnIntro(FPlayer ConcernedPlayer);
 
 FBlackjackGame BlackjackGame(3); // Game instance
 FPlayer Player("Player", PlayerType::Human);
@@ -64,41 +66,60 @@ void PlayGame()
 	// TODO: Add step by step progress ?
 	do
 	{
-		PrintRoundIntro();		
+		PrintRoundIntro();
 		DrawInitialCards();
 
-		// Loop until there's a winner (turns)
-			// If Player didn't end his round, Player turn (PLAYER VALUE = X) 
-				// Draw a card
-					// card3 (value of..)
-					// Your PLAYER VALUE is X
-					// If PLAYER VALUE > 21 
-						// Then Player loses round (exit loop)
-					// If PLAYER VALUE = 21 
-						// Then Player wins round (exit loop)
-					// Else
-						// Continue
-				// End round
-					// You end round with a PLAYER VALUE of X
-					// Player turn is ignored until end of round
+		// Loop until there's a round winner (turns)
+		while (!RoundHasAWinner())
+		{
+			if (BlackjackGame.GetCurrentTurn() == Turn::PlayerTurn)
+			{
+				// Player turn
+				PrintTurnIntro(Player);
 
-			// AI turn 
+				// If Player didn't end his round, Player turn (PLAYER VALUE = X) 
 				// Draw a card
-					// If AI PLAYER VALUE > 21 
-						// Then AI loses round (exit loop)
-					// If AI PLAYER VALUE = 21 
-						// Then AI wins round (exit loop)
-					// Else
-						// Continue
+				// card3 (value of..)
+				// Your PLAYER VALUE is X
+				// If PLAYER VALUE > 21 
+				// Then Player loses round (exit loop)
+				// If PLAYER VALUE = 21 
+				// Then Player wins round (exit loop)
+				// Else
+				// Continue
 				// End round
-					// AI ends round with a PLAYER VALUE of X
-					// AI turn is ignored until end of round
-		// Turns loop end		
-	// Rounds loop end
-	} while (!GameHasAWinner());
+				// You end round with a PLAYER VALUE of X
+				// Player turn is ignored until end of round
 
-	// Player 3 - 2 AI (example)
+				BlackjackGame.NextTurn();
+			}
+			else if (BlackjackGame.GetCurrentTurn() == Turn::AITurn)
+			{
+				// AI Turn
+				PrintTurnIntro(AI);
+
+				// If AI didn't end his round, AI turn (PLAYER VALUE = X) 
+				// Draw a card
+				// If AI PLAYER VALUE > 21 
+				// Then AI loses round (exit loop)
+				// If AI PLAYER VALUE = 21 
+				// Then AI wins round (exit loop)
+				// Else
+				// Continue
+				// End round
+				// AI ends round with a PLAYER VALUE of X
+				// AI turn is ignored until end of round	
+
+				BlackjackGame.NextTurn();
+			}			
+		} // Turns loop end	
+
+		BlackjackGame.NextRound();		
+	} while (!GameHasAWinner()); // Rounds loop end
+
+	// Print score : Player 3 - 2 AI (example)
 	// Congratulate the winner of the game
+	std::cout << "Game has ended!\n";
 }
 
 // Prints the simple introduction to the game
@@ -179,6 +200,12 @@ bool GameHasAWinner()
 	//	AI.GetRoundsWonAmount() >= BlackjackGame.GetAmountOfRoundsToWin());
 }
 
+// Returns whether the round has a winner or not
+bool RoundHasAWinner()
+{
+	return (Player.GetPlayerValue() >= 21 || AI.GetPlayerValue() >= 21);
+}
+
 // Prints the current round and the scores
 void PrintRoundIntro()
 {
@@ -206,7 +233,7 @@ void AssignNewCard(FPlayer *ConcernedPlayer)
 			int32 AceValue;
 			do
 			{
-				std::cout << "What value do you want it to take (1 or 11)? ";				
+				std::cout << "What value do you want it to take (1 or 11)? ";
 				std::cin >> AceValue;
 				if (AceValue == 11 || AceValue == 1)
 				{
@@ -223,7 +250,7 @@ void AssignNewCard(FPlayer *ConcernedPlayer)
 			DrawnCard.second = 11;
 			ConcernedPlayer->AddCard(DrawnCard);
 		}
-	}	
+	}
 }
 
 // Prints a given player's player value
@@ -249,4 +276,11 @@ void DrawInitialCards()
 	DrawInitialCard(&AI, 1); // AI draws 1rst random card
 	DrawInitialCard(&Player, 2); // Player draws 2nd random card		
 	DrawInitialCard(&AI, 2); // Player draws 2nd random card
+}
+
+// Prints turn intro
+void PrintTurnIntro(FPlayer ConcernedPlayer)
+{
+	std::cout << ConcernedPlayer.GetPlayerName() << " TURN (PLAYER VALUE = " << ConcernedPlayer.GetPlayerValue() << ")\n";
+	std::cout << "-------------------------\n";
 }

@@ -15,15 +15,27 @@ FBlackjackGame::FBlackjackGame(int32 AmountOfRounds) { Reset(AmountOfRounds); }
 // Getters
 int32 FBlackjackGame::GetCurrentRound() const { return CurrentRound; }
 int32 FBlackjackGame::GetAmountOfRoundsToWin() const { return AmountOfRoundsToWin; }
+Turn FBlackjackGame::GetCurrentTurn() const { return CurrentTurn; }
 
 // Setters
 void FBlackjackGame::NextRound() { CurrentRound++; }
+void FBlackjackGame::NextTurn() {
+	if (CurrentTurn == Turn::PlayerTurn)
+	{
+		CurrentTurn = Turn::AITurn;
+	}
+	else if (CurrentTurn == Turn::AITurn)
+	{
+		CurrentTurn = Turn::PlayerTurn;
+	}
+}
 
 // Workers 
 void FBlackjackGame::Reset(int32 AmountOfRounds)
 {
 	CurrentRound = 1;
 	AmountOfRoundsToWin = AmountOfRounds;
+	CurrentTurn = Turn::PlayerTurn;
 
 	// Init cards
 	int32 CardIndex = 0;

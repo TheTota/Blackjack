@@ -11,6 +11,12 @@
 #define TMap std::map
 using int32 = int;
 
+enum class Turn
+{
+	PlayerTurn,
+	AITurn
+};
+
 class FBlackjackGame
 {
 public:
@@ -18,9 +24,11 @@ public:
 	
 	// Getters
 	int32 GetCurrentRound() const;
-	int32 GetAmountOfRoundsToWin() const ;
+	int32 GetAmountOfRoundsToWin() const;
+	Turn GetCurrentTurn() const;
 	// Setters
 	void NextRound();
+	void NextTurn();
 	// Workers
 	void Reset(int32);
 	std::pair<std::string, int32> DrawCard();
@@ -29,5 +37,6 @@ private:
 	TMap<int32, std::pair<std::string, int32>> AvailableCards;
 	int32 CurrentRound;
 	int32 AmountOfRoundsToWin;
+	Turn CurrentTurn;
 };
 
