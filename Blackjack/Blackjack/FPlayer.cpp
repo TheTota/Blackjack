@@ -17,7 +17,7 @@ int32 FPlayer::GetPlayerValue() const { return PlayerValue; }
 bool FPlayer::PlayerHasEndedRound() const { return HasEndedRound; }
 std::string FPlayer::GetPlayerName() const { return Name; }
 
-PlayerType FPlayer::GetPlayerType() const { return PlayerType(); }
+PlayerType FPlayer::GetPlayerType() const { return Type; }
 
 // Setters
 void FPlayer::WinRound() { RoundsWonAmount++; }
