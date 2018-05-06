@@ -33,6 +33,7 @@ void DrawInitialCards();
 void PrintTurnIntro(FPlayer ConcernedPlayer);
 PlayerAction GetPlayerAction(FPlayer ConcernedPlayer);
 void RoundResetPlayers();
+void AddStep();
 
 FBlackjackGame BlackjackGame(3); // Game instance
 FPlayer Player("Player", PlayerType::Human);
@@ -79,32 +80,36 @@ void PlayGame()
 			if (BlackjackGame.GetCurrentTurn() == Turn::PlayerTurn)
 			{
 				PrintTurnIntro(Player);
+				AddStep();
 
-				// if AI decided to stand in a previous turn
+				// if Player decided to stand in a previous turn
 				if (Player.HasEndedRound())
 				{
 					std::cout << Player.GetPlayerName() << " has ended his round.\n";
 				}
 				else
 				{
-					if (GetPlayerAction(Player) == PlayerAction::Hit) // if AI decides to Hit
+					if (GetPlayerAction(Player) == PlayerAction::Hit) // if Player decides to Hit
 					{
 						AssignNewCard(&Player); // Draw a new card
 					}
-					else // if AI decides to Stand
+					else // if Player decides to Stand
 					{
 						Player.EndRound();
 						std::cout << Player.GetPlayerName() << " decides to end his round.\n";
+						AddStep();
 					}
 				}
 
 				PrintPlayerValue(Player);
 				BlackjackGame.NextTurn();
+				AddStep();
 			}
 			else if (BlackjackGame.GetCurrentTurn() == Turn::AITurn)
 			{
 				// AI Turn
 				PrintTurnIntro(AI);
+				AddStep();
 
 				// if AI decided to stand in a previous turn
 				if (AI.HasEndedRound())
@@ -126,6 +131,7 @@ void PlayGame()
 
 				PrintPlayerValue(AI);
 				BlackjackGame.NextTurn();
+				AddStep();
 			}
 		} // Turns loop end	
 
@@ -213,8 +219,8 @@ bool AskToPlayAgain()
 bool GameHasAWinner()
 {
 	return true; // TODO: Re-enable the game winning condition
-	//return (Player.GetRoundsWonAmount() >= BlackjackGame.GetAmountOfRoundsToWin() ||
-		//AI.GetRoundsWonAmount() >= BlackjackGame.GetAmountOfRoundsToWin());
+	return (Player.GetRoundsWonAmount() >= BlackjackGame.GetAmountOfRoundsToWin() ||
+		AI.GetRoundsWonAmount() >= BlackjackGame.GetAmountOfRoundsToWin());
 }
 
 // Returns whether the round has a winner or not
@@ -232,7 +238,8 @@ void PrintRoundIntro()
 	std::cout << "----------------------------\n";
 	std::cout << "- Round " << BlackjackGame.GetCurrentRound() << ", ";
 	std::cout << "Player " << Player.GetRoundsWonAmount() << " - " << AI.GetRoundsWonAmount() << " AI -\n";
-	std::cout << "----------------------------\n\n";
+	std::cout << "----------------------------\n";
+	AddStep();
 }
 
 // Draws a new card to a given Player, and display informations about it
@@ -276,17 +283,18 @@ void AssignNewCard(FPlayer *ConcernedPlayer)
 // Prints a given player's player value
 void PrintPlayerValue(FPlayer ConcernedPlayer)
 {
-	std::cout << ConcernedPlayer.GetPlayerName() << "'s PLAYER VALUE = " << ConcernedPlayer.GetPlayerValue() << "\n\n";
+	std::cout << ConcernedPlayer.GetPlayerName() << "'s PLAYER VALUE = " << ConcernedPlayer.GetPlayerValue() << "\n";
 }
 
 // Draws an initial card
 void DrawInitialCard(FPlayer *ConcernedPlayer, int32 Turn)
 {
 	std::cout << ConcernedPlayer->GetPlayerName() << " INITIAL TURN (" << Turn << "/2)" << std::endl;
-	std::cout << "-------------------------" << std::endl;
+	std::cout << "-------------------------";
+	AddStep();
 	AssignNewCard(ConcernedPlayer);
 	PrintPlayerValue(*ConcernedPlayer);
-	std::cout << std::endl;
+	AddStep();
 }
 
 // Draws 2 cards for each player at the beginning of a round
@@ -302,7 +310,7 @@ void DrawInitialCards()
 void PrintTurnIntro(FPlayer ConcernedPlayer)
 {
 	std::cout << ConcernedPlayer.GetPlayerName() << " TURN (PLAYER VALUE = " << ConcernedPlayer.GetPlayerValue() << ")\n";
-	std::cout << "-------------------------\n";
+	std::cout << "-------------------------------";
 }
 
 // Returns a PlayerAction for a given player
@@ -349,4 +357,11 @@ void RoundResetPlayers()
 {
 	Player.RoundReset();
 	AI.RoundReset();
+}
+
+// Adds a step during the execution of the code
+// Waits for user input to continue it
+void AddStep()
+{
+	getchar();
 }
