@@ -7,7 +7,7 @@
 
 #pragma once
 #include "FBlackjackGame.h"
-#include <ctime>
+#include <random>
 
 // Constructor
 FBlackjackGame::FBlackjackGame(int32 AmountOfRounds) { Reset(AmountOfRounds); }
@@ -90,7 +90,10 @@ void FBlackjackGame::Reset(int32 AmountOfRounds)
 // Draws a random card from the available cards and returns
 std::pair<std::string, int32> FBlackjackGame::DrawCard()
 {
-	srand(std::time(NULL)); // To get more random results
-	int32 Random = rand() % AvailableCards.size();
+	std::random_device rd;     // only used once to initialise (seed) engine
+	std::mt19937 rng(rd());    // random-number engine used (Mersenne-Twister in this case)
+	std::uniform_int_distribution<int> uni(0, AvailableCards.size()); // guaranteed unibased
+	int32 Random = uni(rng);
+
 	return AvailableCards[Random];
 }
