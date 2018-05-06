@@ -25,7 +25,7 @@ bool AskToPlayAgain();
 void PlayGame();
 bool GameHasAWinner();
 bool RoundHasAWinner();
-FPlayer GetRoundWinner();
+FPlayer* GetRoundWinner();
 void PrintRoundIntro();
 void AssignNewCard(FPlayer *ConcernedPlayer);
 void PrintPlayerValue(FPlayer);
@@ -69,11 +69,11 @@ void PlayGame()
 	Player.CompleteReset("Player", PlayerType::Human);
 	AI.CompleteReset("AI", PlayerType::AI);
 
-	PrintRoundIntro();
-
 	// Loop until a player has won enough rounds
 	do
 	{
+		// TODO: Eventually clear console at the beginning of a round
+		PrintRoundIntro();
 		DrawInitialCards();
 
 		// Loop until there's a round winner (turns)
@@ -87,19 +87,20 @@ void PlayGame()
 				// if Player decided to stand in a previous turn
 				if (Player.HasEndedRound())
 				{
-					std::cout << Player.GetPlayerName() << " has ended his round.\n";
+					std::cout << Player.GetName() << " has ended his round.\n";
 				}
 				else
 				{
 					if (GetPlayerAction(Player) == PlayerAction::Hit) // if Player decides to Hit
 					{
 						AssignNewCard(&Player); // Draw a new card
+						AddStep();
 					}
 					else // if Player decides to Stand
 					{
 						Player.EndRound();
 						FirstPlayerToEndRound = Player;
-						std::cout << Player.GetPlayerName() << " decides to end his round.\n";
+						std::cout << Player.GetName() << " decides to end his round.\n";
 						AddStep();
 					}
 				}
@@ -117,7 +118,7 @@ void PlayGame()
 				// if AI decided to stand in a previous turn
 				if (AI.HasEndedRound())
 				{
-					std::cout << AI.GetPlayerName() << " has ended his round.\n";
+					std::cout << AI.GetName() << " has ended his round.\n";
 				}
 				else
 				{
@@ -129,7 +130,7 @@ void PlayGame()
 					{
 						AI.EndRound();
 						FirstPlayerToEndRound = AI;
-						std::cout << AI.GetPlayerName() << " decides to end his round.\n";
+						std::cout << AI.GetName() << " decides to end his round.\n";
 					}
 				}
 
@@ -140,15 +141,20 @@ void PlayGame()
 		} // Turns loop end	
 
 		// Print round winner
-		FPlayer RoundWinner = GetRoundWinner();
-		std::cout << RoundWinner.GetPlayerName() << " wins the round!\n";
+		FPlayer *RoundWinner = GetRoundWinner();
+		std::cout << RoundWinner->GetName() << " wins the round!\n";
+		RoundWinner->WinRound();
 
 		// Round end actions
 		BlackjackGame.NextRound();
 		RoundResetPlayers();
+		AddStep();
 	} while (!GameHasAWinner()); // Rounds loop end
 
 	// Print score : Player 3 - 2 AI (example)
+	std::cout << "Score of the game : " << Player.GetName() << " " << Player.GetRoundsWonAmount();
+	std::cout << " - " << AI.GetRoundsWonAmount() << " " << AI.GetName();
+	std::cout << std::endl;
 
 	// Congratulate the winner of the game
 	std::cout << "Game has ended!\n";
@@ -203,7 +209,7 @@ void PrintInstructions()
 // Ask the player if he is ready to play the game
 void AskPlayerReady()
 {
-	std::cout << "Press Enter to start playing..." << std::endl;
+	std::cout << "Press Enter to progress in the game..." << std::endl;
 	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 	std::cin.get();
 }
@@ -227,7 +233,6 @@ bool AskToPlayAgain()
 // Returns whether the game has a winner or not
 bool GameHasAWinner()
 {
-	return true; // TODO: Re-enable the game winning condition
 	return (Player.GetRoundsWonAmount() >= BlackjackGame.GetAmountOfRoundsToWin() ||
 		AI.GetRoundsWonAmount() >= BlackjackGame.GetAmountOfRoundsToWin());
 }
@@ -242,26 +247,26 @@ bool RoundHasAWinner()
 }
 
 // Returns the round winner if there is any
-FPlayer GetRoundWinner()
+FPlayer* GetRoundWinner()
 {
 	// Check if a player has reached the value of 21 
 	if (Player.GetPlayerValue() == 21)
 	{
-		return Player;
+		return &Player;
 	}
 	else if (AI.GetPlayerValue() == 21)
 	{
-		return AI;
+		return &AI;
 	}
 
 	// Check if a player has reached a value above 21
 	if (Player.GetPlayerValue() > 21)
 	{
-		return AI;
+		return &AI;
 	}
 	else if (AI.GetPlayerValue() > 21)
 	{
-		return Player;
+		return &Player;
 	}
 
 	// Check if both player stand
@@ -269,20 +274,20 @@ FPlayer GetRoundWinner()
 	{
 		if (Player.GetPlayerValue() > AI.GetPlayerValue())
 		{
-			return Player;
+			return &Player;
 		}
 		else if (Player.GetPlayerValue() < AI.GetPlayerValue())
 		{
-			return AI;
+			return &AI;
 		}
 		else if (Player.GetPlayerValue() == AI.GetPlayerValue())
 		{
-			return FirstPlayerToEndRound;
+			return &FirstPlayerToEndRound;
 		}
 	}	
 
 	// In case..
-	return Player;
+	return &Player;
 }
 
 // Prints the current round and the scores
@@ -302,14 +307,14 @@ void AssignNewCard(FPlayer *ConcernedPlayer)
 	if (DrawnCard.second != 111) // card is NOT an Ace
 	{
 		ConcernedPlayer->AddCard(DrawnCard); // Add card to player's cards
-		std::cout << ConcernedPlayer->GetPlayerName() << " draws a " << DrawnCard.first;
+		std::cout << ConcernedPlayer->GetName() << " draws a " << DrawnCard.first;
 		std::cout << " which has a value of " << DrawnCard.second << std::endl;
 	}
 	else // card is an Ace
 	{
-		if (ConcernedPlayer->GetPlayerType() == PlayerType::Human) // if player draws an Ace
+		if (ConcernedPlayer->GetType() == PlayerType::Human) // if player draws an Ace
 		{
-			std::cout << ConcernedPlayer->GetPlayerName() << " draws an " << DrawnCard.first << std::endl;
+			std::cout << ConcernedPlayer->GetName() << " draws an " << DrawnCard.first << std::endl;
 			int32 AceValue;
 			do
 			{
@@ -322,11 +327,11 @@ void AssignNewCard(FPlayer *ConcernedPlayer)
 			} while (AceValue != 11 && AceValue != 1);
 			ConcernedPlayer->AddCard(DrawnCard);// Add card to player's cards
 		}
-		else if (ConcernedPlayer->GetPlayerType() == PlayerType::AI) // if AI draws and Ace
+		else if (ConcernedPlayer->GetType() == PlayerType::AI) // if AI draws and Ace
 		{
 			// TODO: AI decision making when drawing and ACE
-			std::cout << ConcernedPlayer->GetPlayerName() << " draws an " << DrawnCard.first << std::endl;
-			std::cout << ConcernedPlayer->GetPlayerName() << " decides to give it a value of 11." << std::endl;
+			std::cout << ConcernedPlayer->GetName() << " draws an " << DrawnCard.first << std::endl;
+			std::cout << ConcernedPlayer->GetName() << " decides to give it a value of 11." << std::endl;
 			DrawnCard.second = 11;
 			ConcernedPlayer->AddCard(DrawnCard);
 		}
@@ -336,13 +341,13 @@ void AssignNewCard(FPlayer *ConcernedPlayer)
 // Prints a given player's player value
 void PrintPlayerValue(FPlayer ConcernedPlayer)
 {
-	std::cout << ConcernedPlayer.GetPlayerName() << "'s PLAYER VALUE = " << ConcernedPlayer.GetPlayerValue() << "\n";
+	std::cout << ConcernedPlayer.GetName() << "'s PLAYER VALUE = " << ConcernedPlayer.GetPlayerValue() << "\n";
 }
 
 // Draws an initial card
 void DrawInitialCard(FPlayer *ConcernedPlayer, int32 Turn)
 {
-	std::cout << ConcernedPlayer->GetPlayerName() << " INITIAL TURN (" << Turn << "/2)" << std::endl;
+	std::cout << ConcernedPlayer->GetName() << " INITIAL TURN (" << Turn << "/2)" << std::endl;
 	std::cout << "-------------------------";
 	AddStep();
 	AssignNewCard(ConcernedPlayer);
@@ -362,14 +367,14 @@ void DrawInitialCards()
 // Prints turn intro
 void PrintTurnIntro(FPlayer ConcernedPlayer)
 {
-	std::cout << ConcernedPlayer.GetPlayerName() << " TURN (PLAYER VALUE = " << ConcernedPlayer.GetPlayerValue() << ")\n";
+	std::cout << ConcernedPlayer.GetName() << " TURN (PLAYER VALUE = " << ConcernedPlayer.GetPlayerValue() << ")\n";
 	std::cout << "-------------------------------";
 }
 
 // Returns a PlayerAction for a given player
 PlayerAction GetPlayerAction(FPlayer ConcernedPlayer)
 {
-	if (ConcernedPlayer.GetPlayerType() == PlayerType::Human) // Human decision making
+	if (ConcernedPlayer.GetType() == PlayerType::Human) // Human decision making
 	{
 		// Ask the player what he wants to do
 		std::string Action;
@@ -390,8 +395,13 @@ PlayerAction GetPlayerAction(FPlayer ConcernedPlayer)
 			return PlayerAction::Stand;
 		}
 	}
-	else if (ConcernedPlayer.GetPlayerType() == PlayerType::AI) // AI decision making
+	else if (ConcernedPlayer.GetType() == PlayerType::AI) // AI decision making
 	{
+		// TODO: Handle case:
+		// AI has a value above Player's (nobody is standing)
+		// Player draws a card and get same value as AI (e.g. 20)
+		// Since AI was first to have that value, he can stand and win round
+		// TODO: Also explain that case in the instructions
 		if (AI.GetPlayerValue() > 16 && Player.GetPlayerValue() < AI.GetPlayerValue())
 		{
 			return PlayerAction::Stand;

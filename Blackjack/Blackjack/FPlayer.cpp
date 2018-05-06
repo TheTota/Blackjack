@@ -16,8 +16,8 @@ FPlayer::FPlayer(std::string Name, PlayerType Type) { CompleteReset(Name, Type);
 int32 FPlayer::GetRoundsWonAmount() const { return RoundsWonAmount; }
 int32 FPlayer::GetPlayerValue() const { return PlayerValue; }
 bool FPlayer::HasEndedRound() const { return RoundEnded; }
-std::string FPlayer::GetPlayerName() const { return Name; }
-PlayerType FPlayer::GetPlayerType() const { return Type; }
+std::string FPlayer::GetName() const { return Name; }
+PlayerType FPlayer::GetType() const { return Type; }
 
 // Setters
 void FPlayer::WinRound() { RoundsWonAmount++; }

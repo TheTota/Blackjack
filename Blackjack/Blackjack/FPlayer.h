@@ -33,8 +33,8 @@ public:
 	int32 GetRoundsWonAmount() const;
 	int32 GetPlayerValue() const;
 	bool HasEndedRound() const;
-	std::string GetPlayerName() const;
-	PlayerType GetPlayerType() const;
+	std::string GetName() const;
+	PlayerType GetType() const;
 	// Setters
 	void WinRound();
 	void AddCard(std::pair<std::string, int32>);
