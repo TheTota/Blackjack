@@ -10,6 +10,7 @@
 #pragma once
 #include <iostream>
 #include <string>
+#include <algorithm>
 #include "FBlackjackGame.h"
 #include "FPlayer.h"
 using int32 = int;
@@ -69,7 +70,7 @@ void PlayGame()
 	// Loop until a player has won enough rounds
 	// TODO: Add step by step progress
 	do
-	{		
+	{
 		DrawInitialCards();
 
 		// Loop until there's a round winner (turns)
@@ -77,7 +78,6 @@ void PlayGame()
 		{
 			if (BlackjackGame.GetCurrentTurn() == Turn::PlayerTurn)
 			{
-				// TODO: Player turn
 				PrintTurnIntro(Player);
 
 				// if AI decided to stand in a previous turn
@@ -107,14 +107,14 @@ void PlayGame()
 				PrintTurnIntro(AI);
 
 				// if AI decided to stand in a previous turn
-				if (AI.HasEndedRound()) 
+				if (AI.HasEndedRound())
 				{
 					std::cout << AI.GetPlayerName() << " has ended his round.\n";
 				}
 				else
 				{
 					if (GetPlayerAction(AI) == PlayerAction::Hit) // if AI decides to Hit
-					{						
+					{
 						AssignNewCard(&AI); // Draw a new card
 					}
 					else // if AI decides to Stand
@@ -134,6 +134,7 @@ void PlayGame()
 	} while (!GameHasAWinner()); // Rounds loop end
 
 	// Print score : Player 3 - 2 AI (example)
+
 	// Congratulate the winner of the game
 	std::cout << "Game has ended!\n";
 }
@@ -179,8 +180,8 @@ void PrintInstructions()
 	std::cout << std::endl;
 	std::cout << "At the beginning of each round, both players draw 2 random cards.\n";
 	std::cout << "During his turn, a player has 2 options :\n";
-	std::cout << " - Draw a random card (which value will add up to his PLAYER VALUE)\n";
-	std::cout << " - End the round (the player will skip all his turns until the other player loses the game or ends his turn)\n";
+	std::cout << " - Hit : Draw a random card (which value will add up to his PLAYER VALUE)\n";
+	std::cout << " - Stand : End the round (the player will skip all his turns until the other player loses the game or ends his turn)\n";
 	std::cout << std::endl;
 }
 
@@ -211,7 +212,7 @@ bool AskToPlayAgain()
 // Returns whether the game has a winner or not
 bool GameHasAWinner()
 {
-	return true;
+	return true; // TODO: Re-enable the game winning condition
 	//return (Player.GetRoundsWonAmount() >= BlackjackGame.GetAmountOfRoundsToWin() ||
 		//AI.GetRoundsWonAmount() >= BlackjackGame.GetAmountOfRoundsToWin());
 }
@@ -309,16 +310,24 @@ PlayerAction GetPlayerAction(FPlayer ConcernedPlayer)
 {
 	if (ConcernedPlayer.GetPlayerType() == PlayerType::Human) // Human decision making
 	{
-		// --------- remove below --------
-		if (ConcernedPlayer.GetPlayerValue() > 16) // TODO: Remove if content
+		// Ask the player what he wants to do
+		std::string Action;
+		do
 		{
-			return PlayerAction::Stand;
-		}
-		else
+			std::cout << "Chose and action (hit/stand): ";
+			std::cin >> Action;
+			std::transform(Action.begin(), Action.end(), Action.begin(), ::tolower);
+		} while (Action != "hit" && Action != "stand");
+
+		// Hit or stand
+		if (Action == "hit")
 		{
 			return PlayerAction::Hit;
 		}
-		// --------- remove above --------
+		else if (Action == "stand")
+		{
+			return PlayerAction::Stand;
+		}
 	}
 	else if (ConcernedPlayer.GetPlayerType() == PlayerType::AI) // AI decision making
 	{
