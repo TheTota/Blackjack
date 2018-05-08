@@ -73,11 +73,10 @@ void PlayGame()
 	// Loop until a player has won enough rounds
 	do
 	{
-		// TODO: Fix AI having the first turn after initial turns (happened round 3,4)
-
 		system("cls"); // Clears console at the beginning of the round
 		PrintRoundIntro();
 		DrawInitialCards();
+		BlackjackGame.ResetTurns();
 
 		// Loop until there's a round winner (turns)
 		while (!RoundHasAWinner())

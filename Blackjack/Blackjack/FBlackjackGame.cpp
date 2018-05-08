@@ -20,7 +20,9 @@ Turn FBlackjackGame::GetCurrentTurn() const { return CurrentTurn; }
 
 // Setters
 void FBlackjackGame::NextRound() { CurrentRound++; }
-void FBlackjackGame::NextTurn() {
+void FBlackjackGame::ResetTurns() { CurrentTurn = Turn::PlayerTurn; }
+void FBlackjackGame::NextTurn()
+{
 	if (CurrentTurn == Turn::PlayerTurn)
 	{
 		CurrentTurn = Turn::AITurn;

@@ -28,6 +28,7 @@ public:
 	Turn GetCurrentTurn() const;
 	// Setters
 	void NextRound();
+	void ResetTurns();
 	void NextTurn();
 	// Workers
 	void Reset(int32);
