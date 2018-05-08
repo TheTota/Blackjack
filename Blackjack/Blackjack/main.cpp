@@ -74,7 +74,6 @@ void PlayGame()
 	do
 	{
 		// TODO: Fix AI having the first turn after initial turns (happened round 3,4)
-		// TODO: See issue on GH
 
 		system("cls"); // Clears console at the beginning of the round
 		PrintRoundIntro();
