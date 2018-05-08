@@ -73,10 +73,10 @@ void PlayGame()
 	// Loop until a player has won enough rounds
 	do
 	{
-		system("cls"); // Clears console at the beginning of the round
-		// TODO: Fix spacing bug after being asked something (ace, action..) and pressing enter with empty input
 		// TODO: Fix AI having the first turn after initial turns (happened round 3,4)
 		// TODO: See issue on GH
+
+		system("cls"); // Clears console at the beginning of the round
 		PrintRoundIntro();
 		DrawInitialCards();
 
@@ -110,7 +110,6 @@ void PlayGame()
 				}
 
 				PrintPlayerValue(Player);
-				BlackjackGame.NextTurn();
 				AddStep();
 			}
 			else if (BlackjackGame.GetCurrentTurn() == Turn::AITurn) // AI's turn
@@ -139,9 +138,10 @@ void PlayGame()
 				}
 
 				PrintPlayerValue(AI);
-				BlackjackGame.NextTurn();
 				AddStep();
 			}
+
+			BlackjackGame.NextTurn();
 		} // Turns loop end	
 
 		// Print round winner
@@ -347,13 +347,23 @@ void AssignNewCard(FPlayer *ConcernedPlayer)
 				}
 			} while (AceValue != 11 && AceValue != 1);
 			ConcernedPlayer->AddCard(DrawnCard);// Add card to player's cards
+
+			AddStep();
 		}
 		else if (ConcernedPlayer->GetType() == PlayerType::AI) // if AI draws and Ace
 		{
-			// TODO: AI decision making when drawing and ACE
 			std::cout << ConcernedPlayer->GetName() << " draws an " << DrawnCard.first << std::endl;
-			std::cout << ConcernedPlayer->GetName() << " decides to give it a value of 11." << std::endl;
-			DrawnCard.second = 11;
+			if (ConcernedPlayer->GetPlayerValue() + 11 > 21)
+			{
+				std::cout << ConcernedPlayer->GetName() << " decides to give it a value of 1." << std::endl;
+				DrawnCard.second = 1;
+			}
+			else
+			{
+				std::cout << ConcernedPlayer->GetName() << " decides to give it a value of 11." << std::endl;
+				DrawnCard.second = 11;
+			}
+
 			ConcernedPlayer->AddCard(DrawnCard);
 		}
 	}

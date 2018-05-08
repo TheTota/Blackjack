@@ -43,7 +43,7 @@ void FBlackjackGame::Reset(int32 AmountOfRounds)
 	AvailableCards = {
 		// HEARTS
 		{CardIndex++, { "Ace of Hearts", 111 }},
-		{CardIndex++, { "2 of Hearts", 2 }},
+		/*{CardIndex++, { "2 of Hearts", 2 }},
 		{CardIndex++, { "3 of Hearts", 3 }},
 		{CardIndex++, { "4 of Hearts", 4 }},
 		{CardIndex++, { "5 of Hearts", 5 }},
@@ -54,10 +54,10 @@ void FBlackjackGame::Reset(int32 AmountOfRounds)
 		{CardIndex++, { "10 of Hearts", 10 }},
 		{CardIndex++, { "Jack of Hearts", 10 }},
 		{CardIndex++, { "Queen of Hearts", 10 }},
-		{CardIndex++, { "King of Hearts", 10 }},
+		{CardIndex++, { "King of Hearts", 10 }},*/
 		// DIAMONDS
 		{CardIndex++, { "Ace of Diamonds", 111 }},
-		{CardIndex++, { "2 of Diamonds", 2 }},
+		/*{CardIndex++, { "2 of Diamonds", 2 }},
 		{CardIndex++, { "3 of Diamonds", 3 }},
 		{CardIndex++, { "4 of Diamonds", 4 }},
 		{CardIndex++, { "5 of Diamonds", 5 }},
@@ -68,10 +68,10 @@ void FBlackjackGame::Reset(int32 AmountOfRounds)
 		{CardIndex++, { "10 of Diamonds", 10 }},
 		{CardIndex++, { "Jack of Diamonds", 10 }},
 		{CardIndex++, { "Queen of Diamonds", 10 }},
-		{CardIndex++, { "King of Diamonds", 10 }},
+		{CardIndex++, { "King of Diamonds", 10 }},*/
 		// CLUBS
 		{CardIndex++, { "Ace of Clubs", 111 }},
-		{CardIndex++, { "2 of Clubs", 2 }},
+		/*{CardIndex++, { "2 of Clubs", 2 }},
 		{CardIndex++, { "3 of Clubs", 3 }},
 		{CardIndex++, { "4 of Clubs", 4 }},
 		{CardIndex++, { "5 of Clubs", 5 }},
@@ -82,10 +82,10 @@ void FBlackjackGame::Reset(int32 AmountOfRounds)
 		{CardIndex++, { "10 of Clubs", 10 }},
 		{CardIndex++, { "Jack of Clubs", 10 }},
 		{CardIndex++, { "Queen of Clubs", 10 }},
-		{CardIndex++, { "King of Clubs", 10 }},
+		{CardIndex++, { "King of Clubs", 10 }},*/
 		// SPADES
 		{CardIndex++, { "Ace of Spades", 111 }},
-		{CardIndex++, { "2 of Spades", 2 }},
+		/*{CardIndex++, { "2 of Spades", 2 }},
 		{CardIndex++, { "3 of Spades", 3 }},
 		{CardIndex++, { "4 of Spades", 4 }},
 		{CardIndex++, { "5 of Spades", 5 }},
@@ -96,7 +96,7 @@ void FBlackjackGame::Reset(int32 AmountOfRounds)
 		{CardIndex++, { "10 of Spades", 10 }},
 		{CardIndex++, { "Jack of Spades", 10 }},
 		{CardIndex++, { "Queen of Spades", 10 }},
-		{CardIndex++, { "King of Spades", 10 }},
+		{CardIndex++, { "King of Spades", 10 }},*/
 	};
 }
 
@@ -105,7 +105,7 @@ std::pair<std::string, int32> FBlackjackGame::DrawCard()
 {
 	std::random_device rd;     // only used once to initialise (seed) engine
 	std::mt19937 rng(rd());    // random-number engine used (Mersenne-Twister in this case)
-	std::uniform_int_distribution<int> uni(1, AvailableCards.size()); // guaranteed unibased
+	std::uniform_int_distribution<int> uni(0, AvailableCards.size() - 1); // guaranteed unibased
 	int32 Random = uni(rng);
 
 	return AvailableCards[Random];
