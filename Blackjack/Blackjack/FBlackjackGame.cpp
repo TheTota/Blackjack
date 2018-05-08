@@ -105,7 +105,7 @@ std::pair<std::string, int32> FBlackjackGame::DrawCard()
 {
 	std::random_device rd;     // only used once to initialise (seed) engine
 	std::mt19937 rng(rd());    // random-number engine used (Mersenne-Twister in this case)
-	std::uniform_int_distribution<int> uni(0, AvailableCards.size()); // guaranteed unibased
+	std::uniform_int_distribution<int> uni(1, AvailableCards.size()); // guaranteed unibased
 	int32 Random = uni(rng);
 
 	return AvailableCards[Random];

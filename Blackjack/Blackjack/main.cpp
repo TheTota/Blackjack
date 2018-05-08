@@ -46,9 +46,9 @@ FPlayer FirstPlayerToEndRound;
 // Entry point of the console application
 int main()
 {
+	IntroduceGame();
 	do
 	{
-		IntroduceGame();
 		PlayGame();
 	} while (AskToPlayAgain());
 
@@ -73,9 +73,10 @@ void PlayGame()
 	// Loop until a player has won enough rounds
 	do
 	{
-		// TODO: Eventually clear console at the beginning of a round
+		system("cls"); // Clears console at the beginning of the round
 		// TODO: Fix spacing bug after being asked something (ace, action..) and pressing enter with empty input
 		// TODO: Fix AI having the first turn after initial turns (happened round 3,4)
+		// TODO: See issue on GH
 		PrintRoundIntro();
 		DrawInitialCards();
 
