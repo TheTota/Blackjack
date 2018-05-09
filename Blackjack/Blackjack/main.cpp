@@ -147,6 +147,10 @@ void PlayGame()
 		}
 		else
 		{
+			if (RoundWinner->GetPlayerValue() == 21)
+			{
+				std::cout << "BLACKJACK! ";
+			}
 			std::cout << RoundWinner->GetName() << " wins the round!\n";
 			RoundWinner->WinRound();
 		}
@@ -318,6 +322,7 @@ FPlayer* GetRoundWinner()
 // Prints the current round and the scores
 void PrintRoundIntro()
 {
+	// TODO: Fix spacing issue when restarting game
 	std::cout << "----------------------------\n";
 	std::cout << "- Round " << BlackjackGame.GetCurrentRound() << ", ";
 	std::cout << "Player " << Player.GetRoundsWonAmount() << " - " << AI.GetRoundsWonAmount() << " AI -\n";
@@ -350,7 +355,7 @@ void AssignNewCard(FPlayer *ConcernedPlayer)
 					DrawnCard.second = AceValue;
 				}
 			} while (AceValue != 11 && AceValue != 1);
-			ConcernedPlayer->AddCard(DrawnCard);// Add card to player's cards
+			ConcernedPlayer->AddCard(DrawnCard); // Add card to player's cards
 
 			AddStep();
 		}
@@ -382,12 +387,15 @@ void PrintPlayerValue(FPlayer ConcernedPlayer)
 // Draws an initial card
 void DrawInitialCard(FPlayer *ConcernedPlayer, int32 Turn)
 {
-	std::cout << ConcernedPlayer->GetName() << " INITIAL TURN (" << Turn << "/2)" << std::endl;
-	std::cout << "-------------------------";
-	AddStep();
-	AssignNewCard(ConcernedPlayer);
-	PrintPlayerValue(*ConcernedPlayer);
-	AddStep();
+	if (!RoundHasAWinner())
+	{
+		std::cout << ConcernedPlayer->GetName() << " INITIAL TURN (" << Turn << "/2)" << std::endl;
+		std::cout << "-------------------------";
+		AddStep();
+		AssignNewCard(ConcernedPlayer);
+		PrintPlayerValue(*ConcernedPlayer);
+		AddStep();
+	}
 }
 
 // Draws 2 cards for each player at the beginning of a round
@@ -432,7 +440,7 @@ PlayerAction GetPlayerAction(FPlayer ConcernedPlayer)
 	}
 	else if (ConcernedPlayer.GetType() == PlayerType::AI) // AI decision making
 	{
-		// Handle case where player and AI stand on same player value: no round winner
+		// Handles case where player and AI stand on same player value: no round winner
 		if ((Player.HasEndedRound() && Player.GetPlayerValue() == AI.GetPlayerValue() && AI.GetPlayerValue() > 16)
 			|| (AI.GetPlayerValue() > 16 && Player.GetPlayerValue() < AI.GetPlayerValue()))
 		{
