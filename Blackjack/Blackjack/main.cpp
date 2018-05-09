@@ -347,16 +347,20 @@ void AssignNewCard(FPlayer *ConcernedPlayer)
 		if (ConcernedPlayer->GetType() == PlayerType::Human) // if player draws an Ace
 		{
 			std::cout << ConcernedPlayer->GetName() << " draws an " << DrawnCard.first << std::endl;
-			int32 AceValue;
+			std::string AceValue;
 			do
 			{
 				std::cout << "What value do you want it to take (1 or 11)? ";
 				std::cin >> AceValue;
-				if (AceValue == 11 || AceValue == 1)
+				if (AceValue == "11") 
 				{
-					DrawnCard.second = AceValue;
+					DrawnCard.second = 11;
 				}
-			} while (AceValue != 11 && AceValue != 1);
+				else if (AceValue == "1")
+				{
+					DrawnCard.second = 1;
+				}
+			} while (AceValue != "11" && AceValue != "1");
 			ConcernedPlayer->AddCard(DrawnCard); // Add card to player's cards
 
 			AddStep();
