@@ -1,4 +1,4 @@
-/*
+﻿/*
 	AUTHOR: Thomas CIANFARANI
 	CONTEXT: Blackjack game to consolidate my new C++ skills.
 	DESCRIPTION:
@@ -176,7 +176,17 @@ void PlayGame()
 void PrintGameIntro()
 {
 	std::cout << "Welcome to the game of Blackjack!" << std::endl;
-	// TODO: Add ASCII art here 
+	std::cout << std::endl; 
+ 	std::cout << "    _________	                    _________ " << std::endl;
+ 	std::cout << "   |3        |                     |3        |" << std::endl;
+ 	std::cout << "   |O   O    |                     |+ +   +  |" << std::endl;
+ 	std::cout << "   |         |      ~~~~~~~~~      |         |" << std::endl;
+ 	std::cout << "   |    O    |      BLACKJACK	   |  +   +  |" << std::endl;
+ 	std::cout << "   |         |      ~~~~~~~~~      |         |" << std::endl;
+ 	std::cout << "   |    O   O|                     |  +   + +|" << std::endl;
+ 	std::cout << "   |        3|                     |        6|" << std::endl;
+ 	std::cout << "    ~~~~~~~~~	                    ~~~~~~~~~ " << std::endl;
+	std::cout << std::endl;
 }
 
 // Displays game instructions if players wants to see them
