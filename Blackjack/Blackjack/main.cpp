@@ -268,10 +268,11 @@ FPlayer GetGameWinner()
 // Returns whether the round has a winner or not
 bool RoundHasAWinner()
 {
+	bool InstantWinCase = ((Player.GetPlayerValue() > AI.GetPlayerValue() && AI.HasEndedRound()) || (AI.GetPlayerValue() > Player.GetPlayerValue() && Player.HasEndedRound()));
 	bool ValueCase = (Player.GetPlayerValue() >= 21 || AI.GetPlayerValue() >= 21);
 	bool StandCase = (Player.HasEndedRound() && AI.HasEndedRound());
 
-	return (ValueCase || StandCase);
+	return (ValueCase || StandCase || InstantWinCase);
 }
 
 // Returns the round winner if there is any
@@ -296,6 +297,16 @@ FPlayer* GetRoundWinner()
 	else if (AI.GetPlayerValue() > 21)
 	{
 		return &Player;
+	}
+
+	// Check if there's another instant win case (than blackjack)
+	if (Player.GetPlayerValue() > AI.GetPlayerValue() && AI.HasEndedRound())
+	{
+		return &Player;
+	}
+	else if (AI.GetPlayerValue() > Player.GetPlayerValue() && Player.HasEndedRound())
+	{
+		return &AI;
 	}
 
 	// Check if both player stand
