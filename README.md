@@ -9,3 +9,5 @@ In this game, you play the game of Blackjack against an AI. Have fun trying to b
 
 ### Game
 ![Game1](Images/Capture2.JPG)
+
+Check out the [wiki](https://github.com/TheTota/Blackjack/wiki) to see the Game Design Document (GDD)!
