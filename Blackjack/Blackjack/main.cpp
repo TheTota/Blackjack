@@ -20,7 +20,6 @@ void IntroduceGame();
 void PrintGameIntro();
 void HandleInstructionsPrinting();
 void PrintInstructions();
-void AskPlayerReady();
 bool AskToPlayAgain();
 void PlayGame();
 bool GameHasAWinner();
@@ -48,6 +47,7 @@ int main()
 	IntroduceGame();
 	do
 	{
+		AddStep();
 		PlayGame();
 	} while (AskToPlayAgain());
 
@@ -59,7 +59,8 @@ void IntroduceGame()
 {
 	PrintGameIntro();
 	HandleInstructionsPrinting();
-	AskPlayerReady();
+	std::cout << "Press Enter to progress in the game..." << std::endl;
+	AddStep();
 }
 
 // Plays a single game to completion
@@ -218,14 +219,6 @@ void PrintInstructions()
 	std::cout << std::endl;
 }
 
-// Ask the player if he is ready to play the game
-void AskPlayerReady()
-{
-	std::cout << "Press Enter to progress in the game..." << std::endl;
-	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-	std::cin.get();
-}
-
 // Asks the player if he wants to play again
 bool AskToPlayAgain()
 {
@@ -276,7 +269,6 @@ bool RoundHasAWinner()
 }
 
 // Returns the round winner if there is any
-// TODO: Add case where a player stands and the other player get a value above first's player value: instant win, no need to wait next turn to stand
 FPlayer* GetRoundWinner()
 {
 	// Check if a player has reached the value of 21 
@@ -333,7 +325,6 @@ FPlayer* GetRoundWinner()
 // Prints the current round and the scores
 void PrintRoundIntro()
 {
-	// TODO: Fix spacing issue when restarting game
 	std::cout << "----------------------------\n";
 	std::cout << "- Round " << BlackjackGame.GetCurrentRound() << ", ";
 	std::cout << "Player " << Player.GetRoundsWonAmount() << " - " << AI.GetRoundsWonAmount() << " AI -\n";
