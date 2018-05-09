@@ -14,7 +14,8 @@ using int32 = int;
 enum class PlayerType
 {
 	Human,
-	AI
+	AI,
+	None
 };
 
 enum class PlayerAction

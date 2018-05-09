@@ -40,8 +40,7 @@ void AddStep();
 FBlackjackGame BlackjackGame(3); // Game instance
 FPlayer Player("Player", PlayerType::Human);
 FPlayer AI("AI", PlayerType::AI);
-
-FPlayer FirstPlayerToEndRound;
+FPlayer NoPlayer("None", PlayerType::None); // use when the round has no winner
 
 // Entry point of the console application
 int main()
@@ -101,7 +100,6 @@ void PlayGame()
 					else // if Player decides to Stand
 					{
 						Player.EndRound();
-						FirstPlayerToEndRound = Player;
 						std::cout << Player.GetName() << " decides to end his round.\n";
 						AddStep();
 					}
@@ -130,7 +128,6 @@ void PlayGame()
 					else // if AI decides to Stand
 					{
 						AI.EndRound();
-						FirstPlayerToEndRound = AI;
 						std::cout << AI.GetName() << " decides to end his round.\n";
 					}
 				}
@@ -144,8 +141,15 @@ void PlayGame()
 
 		// Print round winner
 		FPlayer *RoundWinner = GetRoundWinner();
-		std::cout << RoundWinner->GetName() << " wins the round!\n";
-		RoundWinner->WinRound();
+		if (RoundWinner->GetType() == PlayerType::None)
+		{
+			std::cout << "Draw! Both players are standing on the same PLAYER VALUE.\n";
+		}
+		else
+		{
+			std::cout << RoundWinner->GetName() << " wins the round!\n";
+			RoundWinner->WinRound();
+		}
 
 		// Round end actions
 		BlackjackGame.NextRound();
@@ -195,7 +199,7 @@ void PrintInstructions()
 	std::cout << "During a round, players will draw cards whose values will add up to make a PLAYER VALUE.\n";
 	std::cout << "The goal of a player is to get his PLAYER VALUE as close as possible to the value of 21.\n";
 	std::cout << "If a player has his PLAYER VALUE reach a value above 21, he will lose the round.\n";
-	std::cout << "If a player reaches the exact value of 21, he will instantly win the round.\n";
+	std::cout << "If a player reaches the exact value of 21 (Blackjack), he will instantly win the round.\n";
 	std::cout << std::endl;
 	std::cout << "Number cards have their normal value (e.g. 3 heart = 3).\n";
 	std::cout << "Special cards such as jack, queen and king have a value of 10.\n";
@@ -206,6 +210,7 @@ void PrintInstructions()
 	std::cout << "During his turn, a player has 2 options :\n";
 	std::cout << " - Hit : Draw a random card (which value will add up to his PLAYER VALUE)\n";
 	std::cout << " - Stand : End the round (the player will skip all his turns until the other player loses the game or ends his turn)\n";
+	std::cout << "If both players stand on the same PLAYER VALUE, there will be no round winner.\n";
 	std::cout << std::endl;
 }
 
@@ -266,6 +271,7 @@ bool RoundHasAWinner()
 }
 
 // Returns the round winner if there is any
+// TODO: Add case where a player stands and the other player get a value above first's player value: instant win, no need to wait next turn to stand
 FPlayer* GetRoundWinner()
 {
 	// Check if a player has reached the value of 21 
@@ -301,12 +307,12 @@ FPlayer* GetRoundWinner()
 		}
 		else if (Player.GetPlayerValue() == AI.GetPlayerValue())
 		{
-			return &FirstPlayerToEndRound;
+			return &NoPlayer;
 		}
 	}
 
 	// In case..
-	return &Player;
+	return &NoPlayer;
 }
 
 // Prints the current round and the scores
@@ -426,12 +432,9 @@ PlayerAction GetPlayerAction(FPlayer ConcernedPlayer)
 	}
 	else if (ConcernedPlayer.GetType() == PlayerType::AI) // AI decision making
 	{
-		// TODO: Handle case:
-		// AI has a value above Player's (nobody is standing)
-		// Player draws a card and get same value as AI (e.g. 20)
-		// Since AI was first to have that value, he can stand and win round
-		// TODO: Also explain that case in the instructions
-		if (AI.GetPlayerValue() > 16 && Player.GetPlayerValue() < AI.GetPlayerValue())
+		// Handle case where player and AI stand on same player value: no round winner
+		if ((Player.HasEndedRound() && Player.GetPlayerValue() == AI.GetPlayerValue() && AI.GetPlayerValue() > 16)
+			|| (AI.GetPlayerValue() > 16 && Player.GetPlayerValue() < AI.GetPlayerValue()))
 		{
 			return PlayerAction::Stand;
 		}
@@ -441,6 +444,7 @@ PlayerAction GetPlayerAction(FPlayer ConcernedPlayer)
 		}
 	}
 
+	// in case..
 	return PlayerAction::Stand;
 }
 
